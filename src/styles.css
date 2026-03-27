@@ -1,0 +1,131 @@
+html, body, #app {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-family: Arial, sans-serif;
+  background: #141925;
+  color: #edf2ff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.editor-shell {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  width: 100%;
+  height: 100%;
+}
+
+.sidebar {
+  overflow: auto;
+  padding: 14px;
+  background: #21293a;
+  border-right: 1px solid #39445d;
+}
+
+.sidebar section {
+  margin-bottom: 18px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #39445d;
+}
+
+.sidebar h2 {
+  margin: 0 0 10px;
+  font-size: 18px;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+.checkbox-row {
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+
+input[type='text'],
+textarea,
+button,
+input[type='file'] {
+  width: 100%;
+}
+
+input[type='text'],
+textarea {
+  padding: 8px;
+  border: 1px solid #5e6f92;
+  background: #111726;
+  color: #edf2ff;
+  border-radius: 6px;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 120px;
+  font-family: Consolas, monospace;
+}
+
+button {
+  padding: 10px 12px;
+  border: 1px solid #6d83b4;
+  background: #30405c;
+  color: #ffffff;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #3c5073;
+}
+
+button.active {
+  background: #4f74c8;
+  border-color: #9dc0ff;
+}
+
+button:disabled,
+input:disabled,
+textarea:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+.tool-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.button-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.canvas-column {
+  min-width: 0;
+  min-height: 0;
+}
+
+#game-container {
+  width: 100%;
+  height: 100%;
+}
+
+.small-note {
+  font-size: 13px;
+  color: #cdd9f5;
+  line-height: 1.4;
+}
+
+canvas {
+  display: block;
+}
