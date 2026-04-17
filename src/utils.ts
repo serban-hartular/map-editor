@@ -1,8 +1,25 @@
 import Phaser from 'phaser';
-import type { AreaShape, EllipseShape, MapArea, MapData, Point, PolygonShape, RectShape } from './types';
+import type {
+  AreaBackgroundPresentation,
+  AreaIconPresentation,
+  AreaLabelPresentation,
+  AreaOffset,
+  AreaPresentation,
+  AreaShape,
+  EllipseShape,
+  MapArea,
+  MapData,
+  Point,
+  PolygonShape,
+  RectShape
+} from './types';
 
 export function clonePoint(p: Point): Point {
   return { x: p.x, y: p.y };
+}
+
+export function cloneOffset(offset: AreaOffset): AreaOffset {
+  return { x: offset.x, y: offset.y };
 }
 
 export function cloneShape(shape: AreaShape): AreaShape {
@@ -21,7 +38,8 @@ export function cloneShape(shape: AreaShape): AreaShape {
 export function cloneArea(area: MapArea): MapArea {
   return {
     ...area,
-    shape: cloneShape(area.shape)
+    shape: cloneShape(area.shape),
+    presentation: clonePresentation(area.presentation)
   };
 }
 
@@ -146,9 +164,215 @@ export function sanitizeMapData(raw: unknown): MapData {
           id: typeof area.id === 'string' ? area.id : 'area',
           label: typeof area.label === 'string' ? area.label : '',
           iconPath: typeof area.iconPath === 'string' ? area.iconPath : '',
-          shape: sanitizeShape(area.shape)
+          shape: sanitizeShape(area.shape),
+          presentation: sanitizePresentation(area.presentation)
         }))
       : []
+  };
+}
+
+export function clonePresentation(presentation: AreaPresentation | undefined): AreaPresentation | undefined {
+  if (!presentation) {
+    return undefined;
+  }
+
+  return {
+    label: cloneLabelPresentation(presentation.label),
+    background: cloneBackgroundPresentation(presentation.background),
+    icon: cloneIconPresentation(presentation.icon)
+  };
+}
+
+function cloneLabelPresentation(label: AreaLabelPresentation | undefined): AreaLabelPresentation | undefined {
+  if (!label) {
+    return undefined;
+  }
+
+  return {
+    text: label.text,
+    offset: label.offset ? cloneOffset(label.offset) : undefined,
+    style: label.style ? { ...label.style } : undefined
+  };
+}
+
+function cloneBackgroundPresentation(
+  background: AreaBackgroundPresentation | undefined
+): AreaBackgroundPresentation | undefined {
+  if (!background) {
+    return undefined;
+  }
+
+  return {
+    color: background.color ? { ...background.color } : undefined,
+    image: background.image ? { ...background.image } : undefined
+  };
+}
+
+function cloneIconPresentation(icon: AreaIconPresentation | undefined): AreaIconPresentation | undefined {
+  if (!icon) {
+    return undefined;
+  }
+
+  return {
+    path: icon.path,
+    offset: icon.offset ? cloneOffset(icon.offset) : undefined,
+    width: icon.width,
+    height: icon.height
+  };
+}
+
+function sanitizePresentation(raw: unknown): AreaPresentation | undefined {
+  if (!raw || typeof raw !== 'object') {
+    return undefined;
+  }
+
+  const presentation = raw as Record<string, unknown>;
+  const label = sanitizeLabelPresentation(presentation.label);
+  const background = sanitizeBackgroundPresentation(presentation.background);
+  const icon = sanitizeIconPresentation(presentation.icon);
+
+  if (!label && !background && !icon) {
+    return undefined;
+  }
+
+  return { label, background, icon };
+}
+
+function sanitizeLabelPresentation(raw: unknown): AreaLabelPresentation | undefined {
+  if (!raw || typeof raw !== 'object') {
+    return undefined;
+  }
+
+  const label = raw as Record<string, unknown>;
+  const text = typeof label.text === 'string' ? label.text : undefined;
+  const offset = sanitizeOffset(label.offset);
+  const style = sanitizeLabelStyle(label.style);
+
+  if (text === undefined && !offset && !style) {
+    return undefined;
+  }
+
+  return { text, offset, style };
+}
+
+function sanitizeLabelStyle(raw: unknown): AreaLabelPresentation['style'] | undefined {
+  if (!raw || typeof raw !== 'object') {
+    return undefined;
+  }
+
+  const style = raw as Record<string, unknown>;
+  const fontStyle = typeof style.fontStyle === 'string' ? style.fontStyle : undefined;
+  const sanitized: AreaLabelPresentation['style'] = {
+    fontFamily: typeof style.fontFamily === 'string' ? style.fontFamily : undefined,
+    fontSize: num(style.fontSize, NaN),
+    color: typeof style.color === 'string' ? style.color : undefined,
+    fontStyle:
+      fontStyle === 'normal' || fontStyle === 'bold' || fontStyle === 'italic' || fontStyle === 'bold italic'
+        ? fontStyle
+        : undefined,
+    stroke: typeof style.stroke === 'string' ? style.stroke : undefined,
+    strokeThickness: num(style.strokeThickness, NaN)
+  };
+
+  if (Number.isNaN(sanitized.fontSize as number)) {
+    delete sanitized.fontSize;
+  }
+  if (Number.isNaN(sanitized.strokeThickness as number)) {
+    delete sanitized.strokeThickness;
+  }
+
+  if (
+    sanitized.fontFamily === undefined &&
+    sanitized.fontSize === undefined &&
+    sanitized.color === undefined &&
+    sanitized.fontStyle === undefined &&
+    sanitized.stroke === undefined &&
+    sanitized.strokeThickness === undefined
+  ) {
+    return undefined;
+  }
+
+  return sanitized;
+}
+
+function sanitizeBackgroundPresentation(raw: unknown): AreaBackgroundPresentation | undefined {
+  if (!raw || typeof raw !== 'object') {
+    return undefined;
+  }
+
+  const background = raw as Record<string, unknown>;
+  const color = sanitizeBackgroundColor(background.color);
+  const image = sanitizeBackgroundImage(background.image);
+
+  if (!color && !image) {
+    return undefined;
+  }
+
+  return { color, image };
+}
+
+function sanitizeBackgroundColor(raw: unknown): AreaBackgroundPresentation['color'] | undefined {
+  if (!raw || typeof raw !== 'object') {
+    return undefined;
+  }
+
+  const color = raw as Record<string, unknown>;
+  const value = typeof color.value === 'string' ? color.value : '';
+  if (!value) {
+    return undefined;
+  }
+
+  return {
+    value,
+    opacity: clampOpacity(color.opacity)
+  };
+}
+
+function sanitizeBackgroundImage(raw: unknown): AreaBackgroundPresentation['image'] | undefined {
+  if (!raw || typeof raw !== 'object') {
+    return undefined;
+  }
+
+  const image = raw as Record<string, unknown>;
+  const path = typeof image.path === 'string' ? image.path : '';
+  if (!path) {
+    return undefined;
+  }
+
+  return {
+    path,
+    opacity: clampOpacity(image.opacity)
+  };
+}
+
+function sanitizeIconPresentation(raw: unknown): AreaIconPresentation | undefined {
+  if (!raw || typeof raw !== 'object') {
+    return undefined;
+  }
+
+  const icon = raw as Record<string, unknown>;
+  const path = typeof icon.path === 'string' ? icon.path : '';
+  if (!path) {
+    return undefined;
+  }
+
+  return {
+    path,
+    offset: sanitizeOffset(icon.offset),
+    width: positiveNum(icon.width),
+    height: positiveNum(icon.height)
+  };
+}
+
+function sanitizeOffset(raw: unknown): AreaOffset | undefined {
+  if (!raw || typeof raw !== 'object') {
+    return undefined;
+  }
+
+  const offset = raw as Record<string, unknown>;
+  return {
+    x: num(offset.x),
+    y: num(offset.y)
   };
 }
 
@@ -185,6 +409,19 @@ function sanitizeShape(shape: any): AreaShape {
 
 function num(value: unknown, fallback = 0): number {
   return typeof value === 'number' && Number.isFinite(value) ? value : fallback;
+}
+
+function positiveNum(value: unknown): number | undefined {
+  const parsed = num(value, NaN);
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : undefined;
+}
+
+function clampOpacity(value: unknown): number | undefined {
+  if (typeof value !== 'number' || !Number.isFinite(value)) {
+    return undefined;
+  }
+
+  return Phaser.Math.Clamp(value, 0, 1);
 }
 
 export function formatJson(mapData: MapData): string {

@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"name": "map-editor",
+			"path": ".."
+		},
+		{
+			"name": "src",
+			"path": "../../../../../mnt/chromeos/archive/map-editor-split.zip/src"
+		}
+	],
+	"settings": {}
+}

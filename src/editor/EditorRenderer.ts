@@ -1,34 +1,26 @@
 import Phaser from 'phaser';
 import type { EllipseShape, MapArea, Point, RectShape } from '../types';
-import { getAreaCenter, normalizeRectFromPoints, ellipseFromBounds } from '../utils';
+import { normalizeRectFromPoints, ellipseFromBounds } from '../utils';
+import { AreaPresentationRenderer } from '../area/AreaPresentationRenderer';
 
 interface RendererOptions {
   overlay: Phaser.GameObjects.Graphics;
   cameras: { main: Phaser.Cameras.Scene2D.Camera };
-  add: Phaser.GameObjects.GameObjectFactory;
-  iconImages: Map<string, Phaser.GameObjects.Image>;
-  labelTexts: Map<string, Phaser.GameObjects.Text>;
   handleRadiusPx: number;
-  ensureIcon: (area: MapArea) => void;
+  presentationRenderer: AreaPresentationRenderer;
 }
 
 export class EditorRenderer {
   private readonly overlay: Phaser.GameObjects.Graphics;
   private readonly cameras: { main: Phaser.Cameras.Scene2D.Camera };
-  private readonly add: Phaser.GameObjects.GameObjectFactory;
-  private readonly iconImages: Map<string, Phaser.GameObjects.Image>;
-  private readonly labelTexts: Map<string, Phaser.GameObjects.Text>;
   private readonly handleRadiusPx: number;
-  private readonly ensureIcon: (area: MapArea) => void;
+  private readonly presentationRenderer: AreaPresentationRenderer;
 
   constructor(options: RendererOptions) {
     this.overlay = options.overlay;
     this.cameras = options.cameras;
-    this.add = options.add;
-    this.iconImages = options.iconImages;
-    this.labelTexts = options.labelTexts;
     this.handleRadiusPx = options.handleRadiusPx;
-    this.ensureIcon = options.ensureIcon;
+    this.presentationRenderer = options.presentationRenderer;
   }
 
   redraw(
@@ -37,7 +29,7 @@ export class EditorRenderer {
     interactionState: { kind: string; start?: Point; current?: Point; points?: Point[]; hover?: Point | null }
   ): void {
     this.overlay.clear();
-    this.cleanupTransientDisplayObjects(areas);
+    this.presentationRenderer.redraw(areas);
 
     for (const area of areas) {
       this.drawArea(area, selectedArea?.id === area.id);
@@ -54,12 +46,9 @@ export class EditorRenderer {
 
   private drawArea(area: MapArea, selected: boolean): void {
     const lineColor = selected ? 0x44d0ff : 0x8ec5ff;
-    const fillColor = selected ? 0x44d0ff : 0x5b8cff;
     this.overlay.lineStyle(selected ? 3 : 2, lineColor, 1);
-    this.overlay.fillStyle(fillColor, selected ? 0.24 : 0.16);
 
     if (area.shape.type === 'rect') {
-      this.overlay.fillRect(area.shape.x, area.shape.y, area.shape.width, area.shape.height);
       this.overlay.strokeRect(area.shape.x, area.shape.y, area.shape.width, area.shape.height);
       if (selected) {
         const points = [
@@ -71,7 +60,6 @@ export class EditorRenderer {
         points.forEach((p) => this.drawHandle(p));
       }
     } else if (area.shape.type === 'ellipse') {
-      this.overlay.fillEllipse(area.shape.x, area.shape.y, area.shape.radiusX * 2, area.shape.radiusY * 2);
       this.overlay.strokeEllipse(area.shape.x, area.shape.y, area.shape.radiusX * 2, area.shape.radiusY * 2);
       if (selected) {
         [
@@ -88,36 +76,12 @@ export class EditorRenderer {
         this.overlay.lineTo(area.shape.points[i].x, area.shape.points[i].y);
       }
       this.overlay.closePath();
-      this.overlay.fillPath();
       this.overlay.strokePath();
       if (selected) {
         area.shape.points.forEach((p) => this.drawHandle(p));
       }
     }
 
-    const center = getAreaCenter(area);
-    let label = this.labelTexts.get(area.id);
-    if (!label) {
-      label = this.add.text(center.x, center.y - 4, '', {
-        fontFamily: 'Arial',
-        fontSize: '12px',
-        color: '#ffffff',
-        backgroundColor: '#00000099',
-        padding: { left: 4, right: 4, top: 2, bottom: 2 }
-      }).setOrigin(0.5).setDepth(500);
-      this.labelTexts.set(area.id, label);
-    }
-    label.setPosition(center.x, center.y - 14);
-    label.setText(area.label);
-    label.setVisible(Boolean(area.label));
-
-    this.ensureIcon(area);
-    const icon = this.iconImages.get(area.id);
-    if (icon) {
-      icon.setPosition(center.x, center.y);
-      icon.setVisible(Boolean(area.iconPath));
-      icon.setDepth(400);
-    }
   }
 
   private drawHandle(point: Point): void {
@@ -163,19 +127,4 @@ export class EditorRenderer {
     });
   }
 
-  private cleanupTransientDisplayObjects(areas: readonly MapArea[]): void {
-    const validIds = new Set(areas.map((a) => a.id));
-    for (const [id, img] of this.iconImages.entries()) {
-      if (!validIds.has(id)) {
-        img.destroy();
-        this.iconImages.delete(id);
-      }
-    }
-    for (const [id, label] of this.labelTexts.entries()) {
-      if (!validIds.has(id)) {
-        label.destroy();
-        this.labelTexts.delete(id);
-      }
-    }
-  }
 }

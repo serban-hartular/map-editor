@@ -1,0 +1,44 @@
+{
+  "id": "new_map",
+  "title": "New Map",
+  "imagePath": "/maps/Europe_blank_laea_location_map.svg.webp",
+  "wrapX": false,
+  "mapWidth": 1280,
+  "mapHeight": 1095,
+  "areas": [
+    {
+      "id": "ellipse_copy",
+      "label": "Cehia",
+      "iconPath": "/icons/castle.png",
+      "shape": {
+        "type": "ellipse",
+        "x": 614.4094577191556,
+        "y": 678.2379040495015,
+        "radiusX": 175.80909996442077,
+        "radiusY": 67.84900942552429
+      },
+      "presentation": {
+        "label": {
+          "text": "Cehia",
+          "offset": {
+            "x": 15.383027997149611,
+            "y": -4.63233200162631
+          }
+        },
+        "background": {
+          "color": {
+            "value": "#6f2dd2",
+            "opacity": 0.9
+          }
+        },
+        "icon": {
+          "path": "/icons/castle.png",
+          "offset": {
+            "x": -37.97377127359357,
+            "y": -21.40588054292175
+          }
+        }
+      }
+    }
+  ]
+}
