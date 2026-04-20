@@ -214,7 +214,10 @@ export function bindEditorDomEvents(dom: EditorDomRefs, handlers: DomEventHandle
   dom.imageFileInput.addEventListener('change', handlers.onLoadImage);
   dom.jsonFileInput.addEventListener('change', handlers.onLoadJson);
 
-  window.addEventListener('keydown', (event) => {
+  if (activeKeydownHandler) {
+    window.removeEventListener('keydown', activeKeydownHandler);
+  }
+  activeKeydownHandler = (event: KeyboardEvent) => {
     const target = event.target as HTMLElement | null;
     const editingText = !!target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA');
 
@@ -233,8 +236,11 @@ export function bindEditorDomEvents(dom: EditorDomRefs, handlers: DomEventHandle
       event.preventDefault();
       handlers.onDuplicateKey();
     }
-  });
+  };
+  window.addEventListener('keydown', activeKeydownHandler);
 }
+
+let activeKeydownHandler: ((event: KeyboardEvent) => void) | null = null;
 
 export function refreshMapMetadataUI(dom: EditorDomRefs, mapData: MapData, imageBasePath: string): void {
   dom.mapIdInput.value = mapData.id;

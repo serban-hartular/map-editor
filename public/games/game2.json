@@ -1,0 +1,79 @@
+{
+  "id": "new_game",
+  "name": "New Game",
+  "initialPlayerState": {
+    "mapId": "europe1",
+    "areaId": null,
+    "position": {
+      "x": 0,
+      "y": 0
+    },
+    "vehicle": "",
+    "store": {}
+  },
+  "tasks": [],
+  "maps": {
+    "europe1": {
+      "mapId": "europe1",
+      "mapJsonPath": "/maps/europe.json",
+      "areas": {
+        "ellipse_copy": {
+          "display": {
+            "showBackground": false
+          },
+          "onEnterActions": [
+            {
+              "operation": "give",
+              "what": "coin",
+              "qty": 2
+            }
+          ],
+          "onExitActions": [
+            {
+              "operation": "take",
+              "what": "coin",
+              "qty": 1
+            }
+          ],
+          "onEnterMessage": {
+            "text": "asdf"
+          },
+          "onExitMessage": {
+            "text": "fdsa"
+          }
+        },
+        "rect": {
+          "transition": {
+            "targetMapId": "france0",
+            "targetMapJsonPath": "/maps/france2.json",
+            "returnToMapId": "europe1",
+            "returnToAreaId": "rect"
+          }
+        }
+      }
+    },
+    "france0": {
+      "mapId": "france0",
+      "mapJsonPath": "/maps/france2.json",
+      "parentMapId": "europe1",
+      "parentAreaId": "rect",
+      "areas": {
+        "rect": {
+          "onEnterActions": [
+            {
+              "operation": "give",
+              "what": "victory",
+              "qty": 2
+            }
+          ],
+          "onEnterMessage": {
+            "text": "Paris!"
+          },
+          "onExitMessage": {
+            "text": "Au revoir!"
+          }
+        }
+      }
+    }
+  }
+}

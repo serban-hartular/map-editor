@@ -1,0 +1,16 @@
+{
+  "id": "walking_boy",
+  "name": "Walking Boy",
+  "sprites": "/vehicles/boy_explorer/metadata.json",
+  "speed": 180,
+  "terrain": {
+    "sample": "feet",
+    "rules": [
+      {
+        "mode": "block",
+        "colors": ["#0000ff", "#1e90ff", "#4aa3ff", "#5f9ea0", "#C6ECFF", "#53A2C5"],
+        "tolerance": 36
+      }
+    ]
+  }
+}

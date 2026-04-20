@@ -1,0 +1,61 @@
+{
+  "character": {
+    "id": "3bcbd9b2-e379-4eb1-9ee0-623230c55b72",
+    "name": "A boy who is an explorer.",
+    "prompt": "A boy who is an explorer.",
+    "size": {
+      "width": 68,
+      "height": 68
+    },
+    "template_id": "mannequin",
+    "directions": 4,
+    "view": "low top-down",
+    "created_at": "2026-04-20T10:09:51.014444+00:00"
+  },
+  "frames": {
+    "rotations": {
+      "south": "rotations/south.png",
+      "west": "rotations/west.png",
+      "east": "rotations/east.png",
+      "north": "rotations/north.png"
+    },
+    "animations": {
+      "animation-fe95beaa": {
+        "west": [
+          "animations/animation-fe95beaa/west/frame_000.png",
+          "animations/animation-fe95beaa/west/frame_001.png",
+          "animations/animation-fe95beaa/west/frame_002.png",
+          "animations/animation-fe95beaa/west/frame_003.png",
+          "animations/animation-fe95beaa/west/frame_004.png",
+          "animations/animation-fe95beaa/west/frame_005.png"
+        ],
+        "east": [
+          "animations/animation-fe95beaa/east/frame_000.png",
+          "animations/animation-fe95beaa/east/frame_001.png",
+          "animations/animation-fe95beaa/east/frame_002.png",
+          "animations/animation-fe95beaa/east/frame_003.png",
+          "animations/animation-fe95beaa/east/frame_004.png",
+          "animations/animation-fe95beaa/east/frame_005.png"
+        ],
+        "south": [
+          "animations/animation-fe95beaa/south/frame_000.png",
+          "animations/animation-fe95beaa/south/frame_001.png",
+          "animations/animation-fe95beaa/south/frame_002.png",
+          "animations/animation-fe95beaa/south/frame_003.png",
+          "animations/animation-fe95beaa/south/frame_004.png",
+          "animations/animation-fe95beaa/south/frame_005.png"
+        ],
+        "north": [
+          "animations/animation-fe95beaa/north/frame_000.png",
+          "animations/animation-fe95beaa/north/frame_001.png",
+          "animations/animation-fe95beaa/north/frame_002.png",
+          "animations/animation-fe95beaa/north/frame_003.png",
+          "animations/animation-fe95beaa/north/frame_004.png",
+          "animations/animation-fe95beaa/north/frame_005.png"
+        ]
+      }
+    }
+  },
+  "export_version": "2.0",
+  "export_date": "2026-04-20T10:23:39.914130"
+}

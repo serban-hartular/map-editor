@@ -1,0 +1,34 @@
+{
+  "id": "france0",
+  "title": "France",
+  "imagePath": "/maps/France_wiki.png",
+  "wrapX": false,
+  "mapWidth": 960,
+  "mapHeight": 888,
+  "areas": [
+    {
+      "id": "rect",
+      "label": "Paris",
+      "iconPath": "/icons/castle.png",
+      "shape": {
+        "type": "rect",
+        "x": 495.7695412578546,
+        "y": 211.08534846319685,
+        "width": 66.99588700857691,
+        "height": 60.97227976277463
+      },
+      "presentation": {
+        "label": {
+          "text": "Paris",
+          "offset": {
+            "x": 0,
+            "y": -14
+          }
+        },
+        "icon": {
+          "path": "/icons/castle.png"
+        }
+      }
+    }
+  ]
+}

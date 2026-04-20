@@ -1,0 +1,28 @@
+{
+  "id": "walking_man",
+  "name": "Walking Man",
+  "spriteSheetPath": "/vehicles/walking_man.png",
+  "frameWidth": 204,
+  "frameHeight": 256,
+  "margin": 0,
+  "spacing": 1,
+  "frameDurationMs": 140,
+  "directionalFrames": {
+    "down": {
+      "idle": 0,
+      "move": [1, 2, 3, 4]
+    },
+    "right": {
+      "idle": 5,
+      "move": [6, 7, 8, 9]
+    },
+    "up": {
+      "idle": 10,
+      "move": [11, 12, 13, 14]
+    },
+    "left": {
+      "idle": 15,
+      "move": [16, 17, 18, 19]
+    }
+  }
+}
