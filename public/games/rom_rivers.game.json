@@ -1,0 +1,33 @@
+{
+  "id": "romania_rauri",
+  "name": "Romania rauri",
+  "initialPlayerState": {
+    "mapId": "romania_rauri",
+    "areaId": null,
+    "position": {
+      "x": 1200,
+      "y": 800
+    },
+    "vehicle": "/vehicles/water_boy.json",
+    "store": {}
+  },
+  "tasks": [],
+  "maps": {
+    "romania_rauri": {
+      "mapId": "romania_rauri",
+      "mapJsonPath": "/maps/rom_thick_riv.map.json",
+      "areas": {
+        "bucuresti": {
+          "onEnterMessage": {
+            "text": "Bucuresti!",
+            "seconds": 5
+          },
+          "onExitMessage": {
+            "text": "Pa pa!",
+            "seconds": 4
+          }
+        }
+      }
+    }
+  }
+}

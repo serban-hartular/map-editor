@@ -1,0 +1,22 @@
+{
+  "id": "romania_rauri",
+  "title": "Romania Rauri",
+  "imagePath": "/maps/rom_rivers_thick.png",
+  "wrapX": false,
+  "mapWidth": 1232,
+  "mapHeight": 857,
+  "areas": [
+    {
+      "id": "bucuresti",
+      "label": "",
+      "iconPath": "",
+      "shape": {
+        "type": "rect",
+        "x": 721.8079565505975,
+        "y": 635.6294379882819,
+        "width": 32.91632321171551,
+        "height": 32.95249444352703
+      }
+    }
+  ]
+}
