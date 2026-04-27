@@ -1,6 +1,7 @@
 import type { ScenarioAction, ScenarioMessage } from '../scenario/types';
 
 export type TaskConditionOp = '==' | '!=' | '<' | '>' | '<=' | '>=' | 'exists';
+export type TaskAction = ScenarioAction;
 
 export interface PlayerPosition {
   x: number;
@@ -29,6 +30,7 @@ export interface Task {
   inceptionMessage?: ScenarioMessage;
   completionMessage?: ScenarioMessage;
   conditions: TaskCondition[];
+  actions?: TaskAction[];
 }
 
 export interface AreaDisplayConfig {

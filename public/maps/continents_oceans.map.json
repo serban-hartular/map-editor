@@ -1,0 +1,192 @@
+{
+  "id": "Continents Oceans",
+  "title": "Continents Oceans",
+  "imagePath": "/maps/world_map_physical_blank.jpg",
+  "wrapX": true,
+  "mapWidth": 1280,
+  "mapHeight": 726,
+  "areas": [
+    {
+      "id": "america_sud_center",
+      "label": "America de Sud",
+      "iconPath": "",
+      "shape": {
+        "type": "rect",
+        "x": 361.05262848016605,
+        "y": 385.6860480472116,
+        "width": 76.84210622739931,
+        "height": 52.68941562595461
+      },
+      "presentation": {
+        "label": {
+          "text": "America de Sud",
+          "offset": {
+            "x": 4.2105263686246985,
+            "y": -1.3545402497708778
+          },
+          "style": {
+            "fontStyle": "bold",
+            "stroke": "#080808",
+            "strokeThickness": 4
+          }
+        }
+      }
+    },
+    {
+      "id": "africa_center",
+      "label": "Africa",
+      "iconPath": "",
+      "shape": {
+        "type": "rect",
+        "x": 653.8947372172346,
+        "y": 321.5981362957605,
+        "width": 76.84210622739931,
+        "height": 52.68941562595461
+      },
+      "presentation": {
+        "label": {
+          "text": "Africa",
+          "offset": {
+            "x": -5.263157960780745,
+            "y": -2.4083285622900803
+          },
+          "style": {
+            "fontStyle": "bold",
+            "stroke": "#080808",
+            "strokeThickness": 4
+          }
+        }
+      }
+    },
+    {
+      "id": "america_nord_center",
+      "label": "America de Nord",
+      "iconPath": "",
+      "shape": {
+        "type": "rect",
+        "x": 282.3157851861122,
+        "y": 141.40033485499612,
+        "width": 76.84210622739931,
+        "height": 52.68941562595461
+      },
+      "presentation": {
+        "label": {
+          "text": "America de Nord",
+          "offset": {
+            "x": 4.2105263686246985,
+            "y": -1.3545402497708778
+          },
+          "style": {
+            "fontStyle": "bold",
+            "stroke": "#080808",
+            "strokeThickness": 4
+          }
+        }
+      }
+    },
+    {
+      "id": "europa_center",
+      "label": "Europa",
+      "iconPath": "",
+      "shape": {
+        "type": "rect",
+        "x": 615.1578944251146,
+        "y": 133.16320366705705,
+        "width": 76.84210622739931,
+        "height": 52.68941562595461
+      },
+      "presentation": {
+        "label": {
+          "text": "Europa",
+          "offset": {
+            "x": 4.2105263686246985,
+            "y": -1.3545402497708778
+          },
+          "style": {
+            "fontStyle": "bold",
+            "stroke": "#080808",
+            "strokeThickness": 4
+          }
+        }
+      }
+    },
+    {
+      "id": "asia_center",
+      "label": "Asia",
+      "iconPath": "",
+      "shape": {
+        "type": "rect",
+        "x": 852.2105287779069,
+        "y": 121.76470754156068,
+        "width": 76.84210622739931,
+        "height": 52.68941562595461
+      },
+      "presentation": {
+        "label": {
+          "text": "Asia",
+          "offset": {
+            "x": 1.0526315921561604,
+            "y": 0.7530363752672997
+          },
+          "style": {
+            "fontStyle": "bold",
+            "stroke": "#080808",
+            "strokeThickness": 4
+          }
+        }
+      }
+    },
+    {
+      "id": "australia_center",
+      "label": "Australia",
+      "iconPath": "",
+      "shape": {
+        "type": "rect",
+        "x": 1022.9473728248616,
+        "y": 441.25574154705896,
+        "width": 76.84210622739931,
+        "height": 52.68941562595461
+      },
+      "presentation": {
+        "label": {
+          "text": "Australia",
+          "offset": {
+            "x": -5.684341886080802e-14,
+            "y": -3.462116874809084
+          },
+          "style": {
+            "fontStyle": "bold",
+            "stroke": "#080808",
+            "strokeThickness": 4
+          }
+        }
+      }
+    },
+    {
+      "id": "antarctica_center",
+      "label": "Antarctica",
+      "iconPath": "",
+      "shape": {
+        "type": "rect",
+        "x": 674.7368419388323,
+        "y": 653.2603676756099,
+        "width": 76.84210622739931,
+        "height": 52.68941562595461
+      },
+      "presentation": {
+        "label": {
+          "text": "Antarctica",
+          "offset": {
+            "x": -2.1052631843123777,
+            "y": -1.3545402497709063
+          },
+          "style": {
+            "fontStyle": "bold",
+            "stroke": "#080808",
+            "strokeThickness": 4
+          }
+        }
+      }
+    }
+  ]
+}

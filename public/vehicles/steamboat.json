@@ -1,0 +1,28 @@
+{
+  "id": "steam_boat",
+  "name": "Steamboat",
+  "spriteSheetPath": "/vehicles/steamboat3x4.v0.png",
+  "frameWidth": 299,
+  "frameHeight": 400,
+  "margin": 0,
+  "spacing": 0,
+  "frameDurationMs": 140,
+  "directionalFrames": {
+    "down": {
+      "idle": 0,
+      "move": [1, 2, 0]
+    },
+    "right": {
+      "idle": 3,
+      "move": [4, 5, 3]
+    },
+    "up": {
+      "idle": 6,
+      "move": [7, 8, 6]
+    },
+    "left": {
+      "idle": 9,
+      "move": [10, 11, 9]
+    }
+  }
+}

@@ -8,7 +8,7 @@
       "x": 1200,
       "y": 800
     },
-    "vehicle": "/vehicles/water_boy.json",
+    "vehicle": "/vehicles/steamboat.json",
     "store": {}
   },
   "tasks": [],

@@ -1,0 +1,47 @@
+{
+  "id": "continents_oceans",
+  "name": "Continente și Oceane",
+  "initialPlayerState": {
+    "mapId": "Continents Oceans",
+    "areaId": null,
+    "position": {
+      "x": 0,
+      "y": 0
+    },
+    "vehicle": "/vehicles/walking_boy.json",
+    "store": {}
+  },
+  "tasks": [
+    {
+      "id": "find_south_america",
+      "name": "Find South America",
+      "conditions": [
+        {
+          "variable": "justEnteredAreaId",
+          "op": "==",
+          "value": "america_sud_center"
+        }
+      ],
+      "actions": [
+        {
+          "operation": "display",
+          "what": "label",
+          "qty": 1
+        }
+      ]
+    }
+  ],
+  "maps": {
+    "Continents Oceans": {
+      "mapId": "Continents Oceans",
+      "mapJsonPath": "/maps/continents_oceans.map.json",
+      "areas": {
+        "america_sud_center": {
+          "display": {
+            "showLabel": false
+          }
+        }
+      }
+    }
+  }
+}

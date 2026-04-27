@@ -131,7 +131,8 @@ function sanitizeTask(raw: unknown): Task | null {
     name: typeof task.name === 'string' ? task.name : '',
     inceptionMessage: sanitizeMessage(task.inceptionMessage),
     completionMessage: sanitizeMessage(task.completionMessage),
-    conditions: sanitizeConditions(task.conditions)
+    conditions: sanitizeConditions(task.conditions),
+    actions: sanitizeActionList(task.actions)
   };
 }
 
@@ -333,7 +334,8 @@ function cloneTask(task: Task): Task {
     name: task.name,
     inceptionMessage: cloneMessage(task.inceptionMessage),
     completionMessage: cloneMessage(task.completionMessage),
-    conditions: task.conditions.map(cloneCondition)
+    conditions: task.conditions.map(cloneCondition),
+    actions: task.actions?.map((action) => ({ ...action }))
   };
 }
 

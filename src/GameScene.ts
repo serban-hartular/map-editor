@@ -7,7 +7,7 @@ import { GamePlayer } from './game/GamePlayer';
 import { resolveSlideMovement } from './game/movementResolver';
 import { TerrainSampler } from './game/terrainSampler';
 import { mapPointFromAreaToMap, mapPointFromMapToArea } from './game/transitionGeometry';
-import type { AreaGameScenario, GameData, GameMapScenario } from './game/types';
+import type { AreaGameScenario, GameData, GameMapScenario, PlayerState, Task } from './game/types';
 import { createDefaultPlayerState } from './game/utils';
 import {
   bindGameDomEvents,
@@ -39,6 +39,7 @@ export class GameScene extends Phaser.Scene {
   private imageObjectUrl: string | null = null;
   private terrainSampler: TerrainSampler | null = null;
   private activeAreaIds = new Set<string>();
+  private completedTaskIds = new Set<string>();
   private messageExpireAt = 0;
   private isTransitioning = false;
 
@@ -106,6 +107,7 @@ export class GameScene extends Phaser.Scene {
     try {
       this.gameData = await this.fileManager.loadJsonFromFile(file);
       this.gameName = file.name;
+      this.completedTaskIds.clear();
       const initialMapId = this.getInitialMapId();
       if (!initialMapId) {
         throw new Error('Game does not define any maps.');
@@ -349,6 +351,7 @@ export class GameScene extends Phaser.Scene {
     this.activeAreaIds = nextAreaIds;
     const primaryArea = nextAreas.length > 0 ? nextAreas[nextAreas.length - 1].id : null;
     this.playerController.setArea(primaryArea);
+    this.checkTasks();
     this.redraw();
   }
 
@@ -373,7 +376,7 @@ export class GameScene extends Phaser.Scene {
     this.maybeShowMessage(message);
 
     const actions = kind === 'enter' ? areaScenario.onEnterActions : areaScenario.onExitActions;
-    this.applyActions(actions);
+    this.applyActions(actions, areaId);
 
     if (kind === 'enter' && areaScenario.transition) {
       return this.getMapScenario(areaScenario.transition.targetMapId) ?? {
@@ -482,15 +485,112 @@ export class GameScene extends Phaser.Scene {
     return Boolean(currentMapScenario?.parentMapId && currentMapScenario?.parentAreaId);
   }
 
-  private applyActions(actions: ScenarioAction[] | undefined): void {
+  private applyActions(actions: ScenarioAction[] | undefined, areaId?: string | null): void {
     if (!actions || actions.length === 0) {
       return;
     }
 
+    let displayChanged = false;
     for (const action of actions) {
+      if (action.operation === 'display') {
+        displayChanged = this.applyDisplayAction(action, areaId) || displayChanged;
+        continue;
+      }
+
       this.playerController.applyAction(action);
     }
     this.refreshStoreUI();
+    if (displayChanged) {
+      this.redraw();
+    }
+  }
+
+  private applyDisplayAction(action: ScenarioAction, areaId?: string | null): boolean {
+    if (!this.currentMapId || !this.gameData || !areaId) {
+      return false;
+    }
+
+    const mapScenario = this.gameData.maps[this.currentMapId];
+    if (!mapScenario) {
+      return false;
+    }
+
+    const areaScenario = mapScenario.areas[areaId] ?? {};
+    const display = { ...areaScenario.display };
+    const visible = action.qty !== 0;
+
+    if (action.what === 'label') {
+      display.showLabel = visible;
+    } else if (action.what === 'icon') {
+      display.showIcon = visible;
+    } else if (action.what === 'background') {
+      display.showBackground = visible;
+    } else {
+      return false;
+    }
+
+    mapScenario.areas[areaId] = {
+      ...areaScenario,
+      display
+    };
+    return true;
+  }
+
+  private checkTasks(): void {
+    if (!this.gameData) {
+      return;
+    }
+
+    const state = this.playerController.getState();
+    for (const task of this.gameData.tasks) {
+      if (this.completedTaskIds.has(task.id) || !this.isTaskComplete(task, state)) {
+        continue;
+      }
+
+      this.completedTaskIds.add(task.id);
+      this.applyActions(task.actions, state.justEnteredAreaId ?? state.areaId);
+      this.maybeShowMessage(task.completionMessage);
+    }
+  }
+
+  private isTaskComplete(task: Task, state: PlayerState): boolean {
+    if (task.conditions.length === 0) {
+      return false;
+    }
+
+    return task.conditions.every((condition) => {
+      const current = this.resolveConditionValue(condition.variable, state);
+      if (condition.op === 'exists') {
+        return current !== undefined && current !== null;
+      }
+
+      const expected = condition.value;
+      if (condition.op === '==') return current === expected;
+      if (condition.op === '!=') return current !== expected;
+      if (typeof current !== 'number' || typeof expected !== 'number') {
+        return false;
+      }
+      if (condition.op === '<') return current < expected;
+      if (condition.op === '>') return current > expected;
+      if (condition.op === '<=') return current <= expected;
+      if (condition.op === '>=') return current >= expected;
+      return false;
+    });
+  }
+
+  private resolveConditionValue(variable: string, state: PlayerState): string | number | null | undefined {
+    if (variable === 'mapId') return state.mapId;
+    if (variable === 'areaId') return state.areaId;
+    if (variable === 'vehicle') return state.vehicle;
+    if (variable === 'justEnteredAreaId') return state.justEnteredAreaId;
+    if (variable === 'justExitedAreaId') return state.justExitedAreaId;
+    if (variable === 'position.x') return state.position.x;
+    if (variable === 'position.y') return state.position.y;
+    if (variable.startsWith('store.')) {
+      return state.store[variable.slice('store.'.length)];
+    }
+
+    return state.store[variable];
   }
 
   private maybeShowMessage(message: ScenarioMessage | undefined): void {
